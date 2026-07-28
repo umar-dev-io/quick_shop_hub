@@ -1,13 +1,15 @@
 import { Outlet } from "react-router";
 import Navbar from "../components/Navbar";
 
-function PrivateLayout() {
+const PrivateLayout = ({ onLogout, cartCount }) => {
   return (
-    <div>
-      <Navbar />
-      <Outlet />
-    </div>
+    <>
+      <Navbar onLogout={onLogout} cartCount={cartCount} />
+      <main className="pt-16">
+        <Outlet />
+      </main>
+    </>
   );
-}
+};
 
 export default PrivateLayout;

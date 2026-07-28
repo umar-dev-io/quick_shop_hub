@@ -10,7 +10,27 @@ import PageNotFound from "../pages/PageNotFound";
 import ProtctedLayout from "../layout/ProtctedLayout";
 
 const AppRouter = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem("isLoggedIn") === "true";
+  });
+
+  // 1. Add cart state here
+  const [cartItems, setCartItems] = useState([]);
+
+  const handleLogin = () => {
+    localStorage.setItem("isLoggedIn", "true");
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+  };
+
+  // 2. Add function to update cart
+  const handleAddToCart = (product) => {
+    setCartItems((prevItems) => [...prevItems, product]);
+  };
 
   const router = createBrowserRouter([
     {
@@ -19,7 +39,7 @@ const AppRouter = () => {
       children: [
         {
           path: "/login",
-          element: <Login onLogin={() => setIsLoggedIn(true)} />,
+          element: <Login onLogin={handleLogin} />,
         },
         {
           path: "privateAbout",
@@ -31,11 +51,18 @@ const AppRouter = () => {
       element: <ProtctedLayout isLoggedIn={isLoggedIn} />,
       children: [
         {
-          element: <PrivateLayout />,
+          // 3. Pass cart count down to PrivateLayout
+          element: (
+            <PrivateLayout
+              onLogout={handleLogout}
+              cartCount={cartItems.length}
+            />
+          ),
           children: [
             {
               path: "/",
-              element: <Home />,
+              // 4. Pass handleAddToCart into Home
+              element: <Home onAddToCart={handleAddToCart} />,
             },
             {
               path: "/about",
@@ -47,8 +74,8 @@ const AppRouter = () => {
     },
     {
       path: "*",
-      element: <PageNotFound />
-    }
+      element: <PageNotFound />,
+    },
   ]);
 
   return <RouterProvider router={router} />;

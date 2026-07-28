@@ -1,6 +1,12 @@
 import React from "react";
-const Home = () => {
-  return <div className="">Home</div>;
+import ProductSecton from "../../components/ProductSecton";
+
+const Home = ({ onAddToCart }) => {
+  return (
+    <div>
+      <ProductSecton onAddToCart={onAddToCart} />
+    </div>
+  );
 };
 
 export default Home;
