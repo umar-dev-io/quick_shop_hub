@@ -29,3 +29,7 @@
     font-size: 16px;
   }
 }
+
+@theme {
+  --color-sky-blue: #0b96b8;
+}
