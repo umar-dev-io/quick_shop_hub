@@ -9,6 +9,7 @@ import About from "../pages/public/About";
 import PageNotFound from "../pages/PageNotFound";
 import ProtctedLayout from "../layout/ProtctedLayout";
 import Proceed from "../pages/public/Proceed";
+import AdminLogin from "../pages/admin/AdminLogin";
 const AppRouter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return localStorage.getItem("isLoggedIn") === "true";
@@ -86,6 +87,11 @@ const AppRouter = () => {
           path: "/privateAbout",
           element: <PrivateAbout />,
         },
+        {
+          path: "/admin",
+          element: <AdminLogin />,
+        },
+        
       ],
     },
     {
