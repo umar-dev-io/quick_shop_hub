@@ -1,7 +1,18 @@
-import React from "react";
-import { ShoppingCart, Eye, Star, CheckCircle, XCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ShoppingCart, Eye, Star, CheckCircle, XCircle, Check } from "lucide-react";
 
-const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
+const ProductCard = ({ product, cartItems = [], onAddToCart, onViewDetails }) => {
+  // 1. Check if the item exists in the parent cart array
+  const inCart = cartItems.some((item) => item.id === product.id);
+
+  // 2. Local state for immediate UI feedback on click
+  const [isAdded, setIsAdded] = useState(inCart);
+
+  // 3. Keep local state in sync if cartItems updates (e.g. item removed from cart elsewhere)
+  useEffect(() => {
+    setIsAdded(cartItems.some((item) => item.id === product.id));
+  }, [cartItems, product.id]);
+
   const {
     thumbnail,
     title,
@@ -14,7 +25,17 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
   } = product;
 
   // Calculate price after discount
-  const discountedPrice = (price - (price * discountPercentage) / 100).toFixed(2);
+  const discountedPrice = (price - (price * (discountPercentage || 0)) / 100).toFixed(2);
+
+  const handleAddClick = () => {
+    // Force the button to turn green immediately
+    setIsAdded(true);
+
+    // Call the parent handler to add to cart
+    if (onAddToCart) {
+      onAddToCart(product);
+    }
+  };
 
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-2xl bg-white border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-blue/10 hover:border-sky-blue/30">
@@ -75,7 +96,7 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
             <Star className="h-4 w-4 fill-current" />
           </div>
           <span className="text-xs font-bold text-slate-700">
-            {rating.toFixed(1)}
+            {rating ? rating.toFixed(1) : "N/A"}
           </span>
         </div>
 
@@ -101,13 +122,28 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
             Details
           </button>
 
+          {/* Persistent Green Added Button */}
           <button
             type="button"
-            onClick={() => onAddToCart && onAddToCart(product)}
-            className="flex items-center justify-center gap-1.5 rounded-xl bg-sky-blue py-2.5 text-xs font-bold text-white shadow-md shadow-sky-blue/20 hover:bg-sky-blue/90 active:scale-95 transition-all focus:outline-none"
+            onClick={handleAddClick}
+            disabled={stock <= 0}
+            className={`flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-xs font-bold text-white shadow-md active:scale-95 transition-all duration-200 focus:outline-none ${
+              isAdded
+                ? "bg-emerald-600 shadow-emerald-600/20"
+                : "bg-sky-blue shadow-sky-blue/20 hover:bg-sky-blue/90"
+            }`}
           >
-            <ShoppingCart className="h-3.5 w-3.5" />
-            <span>Add</span>
+            {isAdded ? (
+              <>
+                <Check className="h-3.5 w-3.5" />
+                <span>Added</span>
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="h-3.5 w-3.5" />
+                <span>Add</span>
+              </>
+            )}
           </button>
         </div>
 
