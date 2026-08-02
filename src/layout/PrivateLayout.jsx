@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 const PrivateLayout = ({
-  onLogout,
   cartCount,
   cartItems,
   setCartItems, 
@@ -14,7 +13,6 @@ const PrivateLayout = ({
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar
-        onLogout={onLogout}
         cartCount={cartCount}
         cartItems={cartItems}
         onUpdateQuantity={onUpdateQuantity}

@@ -1,16 +1,23 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { ShoppingCart, LogOut } from "lucide-react";
+import { LogInOutUse } from "../context/LogInOutContext";
 import SelectedCartProduct from "./SelectedCartProduct";
 
 const Navbar = ({
   cartCount = 0,
   cartItems = [],
   username = "student",
-  onLogout,
   onUpdateQuantity,
   onRemoveItem,
 }) => {
+  const { onLogout } = LogInOutUse();
+  const navigate = useNavigate();
+
+  function handeLogout() {
+    (onLogout(), navigate("/login", { replace: true }));
+  }
+
   const [isCartOpen, setIsCartOpen] = useState(false);
   const demoAvatar =
     "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80";
@@ -30,7 +37,6 @@ const Navbar = ({
 
           {/* Right Section: Cart, User Profile & Logout */}
           <div className="flex items-center gap-4 sm:gap-6">
-            
             {/* Cart Icon Button - Opens Drawer */}
             <button
               type="button"
@@ -61,7 +67,7 @@ const Navbar = ({
             {/* Logout Button */}
             <button
               type="button"
-              onClick={onLogout}
+              onClick={handeLogout}
               className="flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs sm:text-sm font-medium hover:bg-red-600/80 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-white/50"
               title="Logout"
             >

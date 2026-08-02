@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { User, Lock, Eye, EyeOff, LogIn } from "lucide-react";
+import { LogInOutUse } from "../../context/LogInOutContext";
 import quickShopLogo from "../../assets/logo/quickShopLogo.png";
 
 const USER_CREDENTIALS = {
@@ -8,7 +9,7 @@ const USER_CREDENTIALS = {
   password: "12345678",
 };
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +20,7 @@ const Login = ({ onLogin }) => {
     if (error) setError("");
   }
 
+  const { onLogin } = LogInOutUse();
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -41,7 +43,6 @@ const Login = ({ onLogin }) => {
 
       {/* Login Card (Reduced max-width to max-w-sm and padding to p-6) */}
       <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl border border-sky-blue/20 transition-all duration-300 hover:shadow-sky-blue/15 animate-[fadeInUp_0.4s_ease-out]">
-        
         {/* Header & Logo Section */}
         <div className="mb-5 text-center flex flex-col items-center">
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-sky-blue/10 p-2.5 ring-4 ring-sky-blue/5 transition-transform duration-300 hover:scale-105">

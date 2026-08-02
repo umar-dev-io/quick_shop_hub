@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
+import { useState } from "react";
 import PublicLayout from "../layout/PublicLayout";
 import PrivateLayout from "../layout/PrivateLayout";
 import Login from "../pages/private/Login";
@@ -11,10 +11,6 @@ import ProtctedLayout from "../layout/ProtctedLayout";
 import Proceed from "../pages/public/Proceed";
 import AdminLogin from "../pages/admin/AdminLogin";
 const AppRouter = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    return localStorage.getItem("isLoggedIn") === "true";
-  });
-
   // 1. Cart state
   const [cartItems, setCartItems] = useState([]);
 
@@ -64,16 +60,6 @@ const AppRouter = () => {
     0,
   );
 
-  const handleLogin = () => {
-    localStorage.setItem("isLoggedIn", "true");
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    setIsLoggedIn(false);
-  };
-
   const router = createBrowserRouter([
     {
       element: <PublicLayout />,
@@ -81,7 +67,7 @@ const AppRouter = () => {
       children: [
         {
           path: "/login",
-          element: <Login onLogin={handleLogin} />,
+          element: <Login />,
         },
         {
           path: "/privateAbout",
@@ -91,20 +77,18 @@ const AppRouter = () => {
           path: "/admin",
           element: <AdminLogin />,
         },
-        
       ],
     },
     {
-      element: <ProtctedLayout isLoggedIn={isLoggedIn} />,
+      element: <ProtctedLayout />,
       children: [
         {
           // Pass cart state and handlers down to PrivateLayout
           element: (
             <PrivateLayout
-              onLogout={handleLogout}
               cartCount={totalCartCount}
               cartItems={cartItems}
-              setCartItems={setCartItems} 
+              setCartItems={setCartItems}
               onAddToCart={handleAddToCart}
               onUpdateQuantity={handleUpdateQuantity}
               onRemoveItem={handleRemoveFromCart}

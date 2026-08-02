@@ -1,10 +1,8 @@
 import { Navigate, Outlet } from "react-router";
+import { LogInOutUse } from "../context/LogInOutContext";
+function ProtctedLayout() {
+  const { isLoggedIn } = LogInOutUse();
 
-function ProtctedLayout({ isLoggedIn }) {
-  if (!isLoggedIn) {
-    return <Navigate to={"/login"} />;
-  }
-  return <Outlet />;
+  return isLoggedIn ? <Outlet /> : <Navigate to={"/login"} replace />;
 }
-
 export default ProtctedLayout;
